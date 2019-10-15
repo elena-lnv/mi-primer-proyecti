@@ -1,0 +1,76 @@
+#JSGF V1.0 utf-8 es;
+
+/**
+	* This grammar aims to generate only grammatical utterances for avoiding noise.
+	* This grammar includes <artist>. The entity <artist> has morphological features which are not controlled under this grammar (gender and number).
+		* This grammar includes an optional article preceding <artist>, which is relevant for groups. 
+ 			* @example los beatles  
+			* Since the features of the article depend on the entity -(1) presence/absence, (2) number and (3) gender-, ungrammatical constructions are generated.
+			* It was still decided to include the article for the sake of covering basic utterances. 
+				* @example [reproduce los]unk [beatles]<artist> 
+		* For avoiding the overgeneration of ungrammatical utterances, it was decided not to generate other utterances which also depend on the features of <artist> and are not basic utterances.  
+			* @example [quiero que suenen los]unk [beatles]<artist>
+			* @example [quiero que suene la artista]unk [rosalÃ­a]<artist>
+	* It was decided not to include discourse markers (such as "por favor"), because they are prototypically placed at sentence-initial and sentence-final position and would multiply the amount of utterances.
+	*/
+	
+grammar music_play;
+
+public <music_play> =
+
+(
+	([([me] puedes) | quiero] (poner | reproducir)) |
+	((puedes | quiero) ponerme) |
+	([quiero] escuchar) |
+	((quiero que) ([me] (pongas | reproduzcas))) |
+	(pon | ponme | reproduce) |
+	([me] (pones | reproduces))
+)
+(
+	([a] [los | las | the] <artist>) | 
+	([la canciÃ³n] <song>) | 
+	([mÃºsica | algo de] <genre>) |
+	((([el (Ã¡lbum | disco)] <album>) | ([la canciÃ³n] <song>)) [de [los | las | the] <artist>])
+);
+
+<artist> =
+	beatles |
+	radiohead |
+	cake |
+	pink floyd |
+	spice girls |
+	rosalÃ­a;
+
+<song> =
+	confortably numb |
+	paranoid android | 	
+	let it be |
+	hey jude |
+	wannabe |
+	malamente;
+	
+<album> =
+	let it be |
+	ummagumma |
+	pressure chief |
+	ok computer |
+	spice |
+	el mal querer;
+	
+<genre> =
+	jazz |
+	rock |
+	pop;
+	
+/**
+	* @example [quiero escuchar a los]<unk> [beatles]<artist>
+	* @example [quiero que reproduzcas las]<unk> [spice girls]<artist>
+	* @example [quiero que me pongas a]<unk> [rosalÃ­a]<artist>
+	* @example [reproducir the]<unk> [beatles]<artist>
+	* @example [ponme]unk [let it be]<song>
+	* @example [me puedes poner]<unk> [let it be]<song> [de]unk [los beatles]<artist>  
+	* @example [puedes ponerme algo de]<unk> [jazz]<genre> 
+	* @example [me pones el Ã¡lbum]<unk> [ummagumma]<album> [de]<unk> [pink floyd]<artist>
+	* @example [puedes reproducir]<unk> [ummagumma]<album>
+	*/  
+ 

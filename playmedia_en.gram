@@ -1,0 +1,60 @@
+#JSGF V1.0 utf-8 en;
+
+/**
+	* Overgeneration is restricted to grammatical utterances for avoiding noise.
+	*
+	* @example [listen to]<unk> [ummagumma]<album>
+	* @example [play me]<unk> [ummagumma]<album>
+	* @example [play me]<unk> [paranoid android]<song> by [radiohead]<artist>
+	*/
+	
+grammar music_play;
+
+public <music_play> =
+
+(
+	([can you] (put on | (play [me]))) |
+	([I want to] (put on | play | listen to))
+)
+(	
+	(<artist>) | 
+	((<song> | <album>) [by <artist>]) |
+	(<genre> [music])
+);
+
+<artist> =
+	beatles |
+	radiohead |
+	cake |
+	pink floyd;
+
+<song> =
+	confortably numb |
+	paranoid android | 	
+	let it be |
+	hey jude;
+	
+<album> =
+	let it be |
+	ummagumma |
+	pressure chief |
+	ok computer;
+	
+<genre> =
+	jazz |
+	rock |
+	pop;
+	
+/**
+	* Limitations
+		* Since the number of lexical entries per entity is expected to be unbalanced (eg. the list of songs is expected to be higher than the list of artists), the grammar might need to include accurate scorings for avoiding that the reading for a kind of entity (eg. song) is prompted within the sstatistical model. 
+		* Increasing the amount of generated utterances might not be necessary for increasing the coverage of the final statistical model.  
+		* With this approach, the coverage of the model might depend on the exhaustiveness of the list.   
+		* Keeping on adding entities would make the grammar unmanageable.
+
+	* Possible solutions
+		* In order to increase the coverage of the named entities, the statistical model could use a database for entities, which could include scorings per lexical item, depending on external factors (eg.: numbers of reproductions for songs, etc.).
+		* Having an external database of named entities, within the grammar, the amount of entities per category could be restricted only to a few examples which have a different syntactic behaviour.
+			* For instance, following the example above for <artist>, it might be sufficient to keep one entity which usually takes an article (beatles) and one entity which usually does not take an article (radiohead, cake or pikn floyd)
+	*/
+	
